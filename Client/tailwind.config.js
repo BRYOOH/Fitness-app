@@ -6,7 +6,15 @@ module.exports = {
   ],
   mode: "jit",
   theme: {
-    extend: {},
+    fontFamily:{
+
+    },
+    extend: {
+      colors:{
+        secondary:"",
+        tertiary:"#1046b0",
+      }
+    },
   },
   plugins: [],
 }

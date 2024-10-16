@@ -13,7 +13,7 @@ import {
       desc: "Total calories burned today",
       key: "totalCaloriesBurnt",
       unit: "kcal",
-      color: "#eb9e34",
+      color: "#eb9e34" ,
       lightColor: "#FDF4EA",
     },
     {
