@@ -1,8 +1,8 @@
 import logo from "../Assets/logo.png"
 import cover from "../Assets/gymcover.jpeg"
 import { useState } from "react"
-import Signin from "./Signin";
-import Signup from "./Signup";
+import Signin from "../Components/Signin";
+import Signup from "../Components/Signup";
 
 const Authentication = () => {
 
