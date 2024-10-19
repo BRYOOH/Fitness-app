@@ -31,7 +31,7 @@ const GymRoutine = () => {
         <div className='flex flex-[1] flex-row justify-between '>
         <div><FitnessCenterRounded /> 30KG</div>
         <div><TimelapseRounded/> 30 min</div>
-        </div>
+        </div> 
         </div>
 
     </div>
