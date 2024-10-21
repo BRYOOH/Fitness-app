@@ -4,7 +4,8 @@ import Authentication from './Pages/Authentication';
 import Navbar from './Components/Navbar';
 import Dashboard from './Pages/Dashboard';
 import Workouts from './Pages/Workouts';
-import Contact from './Components/Contact';
+import Contact from './Pages/Contact';
+import Blogs from './Pages/Blogs';
 
 function App() {
     const[user,setUser] = useState(true);
@@ -17,6 +18,7 @@ function App() {
       <Route path='/' element={<Dashboard/>}/>
       <Route path='/workouts' element={<Workouts/>}/>
       <Route path='/contact' element={<Contact/>}/>
+      <Route path='/blogs' element={<Blogs/>}/>
       </Routes>
       </BrowserRouter>
       </div>

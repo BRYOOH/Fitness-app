@@ -21,6 +21,10 @@ const Navbar = () => {
             className='cursor-pointer font-bold hover:text-blue-600 active:border-b-4 active:border-tertiary'>
             Workouts
             </Link>
+            <Link to='/blogs' 
+            className='cursor-pointer font-bold hover:text-blue-600 active:border-b-4 active:border-tertiary'>
+            Blogs
+            </Link>
             <Link to='/contact'
             className='cursor-pointer font-bold hover:text-blue-600 active:border-b-4 active:border-tertiary'
             >
