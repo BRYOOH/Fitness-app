@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const env = require("dotenv");
 const { UserSignin } = require("./Controllers/Users.js");
 const { WorkoutsInfo } = require("./Controllers/Workouts.js");
+const { Signin } = require("./Controllers/Signin.js");
 const port =4000;
 
 env.config();
@@ -23,6 +24,7 @@ app.get("/",(req,res)=>{
 
 app.post("/signup",UserSignin);
 app.post("/addworkout", WorkoutsInfo);
+app.post("/signin",Signin);
 
 app.listen(port,(error)=>{
     if(!error){
