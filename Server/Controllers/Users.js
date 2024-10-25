@@ -21,7 +21,7 @@ const UserSignin = async(req,res)=>{
 
     const data={
         User:{
-            id:User.id
+            id:User.id 
         }
     }
 
@@ -30,31 +30,55 @@ const UserSignin = async(req,res)=>{
 
  };
 
+ const UserLogin= async (req,res) =>{
+
+    const { email,password } = req.body;
+
+    const user = await Users.findOne({email:email});
+
+    if(!user){
+        res.status(400).json({success:false,errors:"User email not found"})
+    }
+
+    const checkPassword = await Users.findOne({password:password});
+
+    if(!checkPassword){
+      res.status(400).json({success:false,errors:"User password not found"})
+    }
+
+    const token = jwt.sign({id:user._id},"secret_token");
+
+   return res.status(400).json({token,user:{id:user._id,email:user.email}});
+
+ };
+
  const getDashboard = async(req,res) =>{
-   
-    let userId = req.User?.id;
+    
+    let userId = req.user.id;
     let user = await Users.findById(userId);
 
+    console.log(user);
+    
     if(!user){
         return res.status(400).json({success:false,errors:"User not found"});
     }
 
-    const dateFormat = new Date();
+    const currentDataFormatted = new Date();
     const startToday = new Date(
-        dateFormat.getFullYear(),
-        dateFormat.getMonth(),
-        dateFormat.getDate()
+        currentDataFormatted.getFullYear(),
+        currentDataFormatted.getMonth(),
+        currentDataFormatted.getDate()
     );
 
     const endDay = new Date(
-        dateFormat.getFullYear(),
-        dateFormat.getMonth(),
-        dateFormat.getDate() + 1 
+        currentDataFormatted.getFullYear(),
+        currentDataFormatted.getMonth(),
+        currentDataFormatted.getDate() + 1 
        );
 
        //calculate caloriesburnt
      const totalCaloriesBurnt = await Workouts.aggregate([
-     {$match:{User:user._id,date:{$gte:startToday,$lt:endDay}}},
+     {$match:{user:user._id,date:{$gte:startToday,$lt:endDay}}},
      {
      $group:{
          _id:null,
@@ -65,7 +89,7 @@ const UserSignin = async(req,res)=>{
 
     //Calculate total no of workouts
      const totalWorkouts = await Workouts.countDocuments({
-         User: userId,
+         user: userId,
         date:{ $gte:startToday, $lt:endDay},
      });
 
@@ -74,13 +98,13 @@ const UserSignin = async(req,res)=>{
      totalCaloriesBurnt[0].totalCaloriesBurnt/totalWorkouts:0;
 
      //Fetch category of workouts
-    categoryCalories = await Workouts.aggregate([
+   const categoryCalories = await Workouts.aggregate([
     {
-      $match:{ User:user._id, data:{ $gte:startToday,$lt:endDay }}
+      $match:{ user:user._id, date:{ $gte:startToday,$lt:endDay }}
      },
     {
     $group:{
-        id: "$category",
+        _id: "$category",
         totalCaloriesBurnt:{ $sum: "$caloriesBurned"}
           } 
     }, 
@@ -104,21 +128,21 @@ const UserSignin = async(req,res)=>{
     weeks.push(`${date.getDate()}th`);
 
     const startofToday = new Date(
-        dateFormat.getFullYear(),
-        dateFormat.getMonth(),
-        dateFormat.getDate()
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
         );
         
     const endofDay = new Date(
-        dateFormat.getFullYear(),
-        dateFormat.getMonth(),
-         dateFormat.getDate() + 1 
+        date.getFullYear(),
+        date.getMonth(),
+         date.getDate() + 1 
         );
             
     const weekData = await Workouts.aggregate([
         {
         $match:{
-            User:user._id,
+            user:user._id,
             date:{$gte:startofToday,$lt:endofDay},
              },
          },
@@ -155,6 +179,6 @@ const UserSignin = async(req,res)=>{
 
  }
  
- module.exports ={UserSignin,getDashboard};
+ module.exports ={UserSignin,getDashboard,UserLogin};
 
 

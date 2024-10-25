@@ -3,9 +3,9 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const env = require("dotenv");
-const { UserSignin } = require("./Controllers/Users.js");
+const { UserSignin, getDashboard, UserLogin } = require("./Controllers/Users.js");
 const { WorkoutsInfo } = require("./Controllers/Workouts.js");
-const { Signin } = require("./Controllers/Signin.js");
+const {verifyToken} = require("./Middleware/verifyToken.js")
 const port =4000;
 
 env.config();
@@ -15,7 +15,7 @@ app.use(cors());
 
 
 mongoose.connect("mongodb+srv://brianmuchira001:Muriukis@cluster0.c8atalq.mongodb.net/GymFit").then
-((resp)=>console.log("MongoDB is running")).catch((err)=>{console.log(err);
+((resp)=>console.log("MongoDB is running")).catch((err)=>{console.log("MongoDB clashed");
 })
 
 app.get("/",(req,res)=>{
@@ -24,7 +24,8 @@ app.get("/",(req,res)=>{
 
 app.post("/signup",UserSignin);
 app.post("/addworkout", WorkoutsInfo);
-app.post("/signin",Signin);
+app.post("/signin",UserLogin);
+app.get("/dashboard",verifyToken,getDashboard);
 
 app.listen(port,(error)=>{
     if(!error){
