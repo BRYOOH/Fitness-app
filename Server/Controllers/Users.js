@@ -1,5 +1,3 @@
- const express = require("express");
- const app= express();
  const jwt = require("jsonwebtoken")
  const Users= require ("../Models/Users.js").Users;
  const Workouts= require("../Models/Workouts.js").Workouts;
@@ -52,7 +50,7 @@ const UserSignin = async(req,res)=>{
 
  };
 
- const getDashboard = async(req,res) =>{
+const getDashboard = async(req,res) =>{
     
     let userId = req.user.id;
     let user = await Users.findById(userId);
@@ -178,7 +176,132 @@ const UserSignin = async(req,res)=>{
 
 
  }
+
+ const getWorkoutByDate = async(req,res) =>{
+
+    const userId =req.user?.id;
+    const user= await Users.findById(userId);
+
+    let date =req.query.date ? new Date(req.query.date):new Date();
+    console.log(date);
+    
+    if(!user){
+        res.status(400).json({success:false,errors:"User not found!"})
+    }
+
+    const startToday  = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+    );
+    const endDay = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+    );
+     
+
+    const todayWorkouts = await Workouts.find({
+        userId: userId,
+        date:{$gte:startToday,$lt:endDay},
+    });
+
+    const totalCaloriesBurnt= todayWorkouts.reduce(
+        (total,workout) => total +workout.caloriesBurned,
+        0
+    );
+
+    return res.status(200).json({todayWorkouts,totalCaloriesBurnt});
+ };
  
- module.exports ={UserSignin,getDashboard,UserLogin};
+ const addWorkout = async(req,res)=>{
+ 
+    const userId = req.user?.id;
+    const {workoutString} = req.body;
+
+    console.log(workoutString);
+    
+
+    if(!workoutString){
+        return res.status(400).json({success:false, errors:"Workout string missing"});
+    }
+
+    const eachworkout= workoutString.split(";").map((line)=>trim());
+    const categories =eachworkout.filter((line)=>line.startsWith("#"));
+    if(categories.length ===0){
+        return res.status(400).json({success:false,errors:"No categories found in workout string "})
+    }
+
+    const parseWorkouts=[];
+    let currentCategory = "";
+    let count=0;
+
+    //Loop through each line to parse workout details
+    await eachworkout.forEach((line)=>{
+        count++;
+        if(line.startWith("#")){
+            const parts = line?.split("\n").map((part)=>part.trim());
+            console.log(parts);
+            
+            if(parts.length <5){
+                return res.status(400).json({success:false, errors:`Workout string is missing for ${count}th workout`});
+            }
+            
+            //update current category
+            currentCategory = parts[0].substring(1).trim();
+            
+            //extract workout details
+            const workoutDetails = parseWorkoutLine(parts);
+            if(workoutDetails==null){
+                return res.status(400).json({success:false, errors:"Please enter in proper format"});
+            }
+
+            if(workoutDetails){
+            //add category to workout details
+            workoutDetails.category = currentCategory;
+            parseWorkouts.push(workoutDetails);
+            }else{
+                return res.status(400).json({success:false,errors:`Workout sttring is missing for ${count}th workout`});
+            }
+
+        }
+    });
+
+    await parseWorkouts.forEach( async (workout)=>{
+        workout.caloriesBurned = parseFloat(calculateCaloriesBurnt(workout));
+        await Workouts.create({...workout,user:userId});
+    });
+
+    return res.status(200).json({success:true,errors:"Workout added successfully", workouts:parseWorkouts});
+
+};
+    
+const parseWorkoutLine = (parts)=>{
+        const details ={};
+        console.log(parts);
+
+        if(parts.length >= 5){
+            details.workoutName = parts[1].substring(1).trim();
+            details.sets = parseInt(parts[2].split("sets")[0].substring(1).trim());
+            details.reps = parseInt(parts[2].split("sets")[1].split("reps")[0].substring(1).trim());
+            details.weight= parseFloat(parts[3].split("kg")[0].sunstring(1).trim());
+            details.duration = parseFloat(parts[4].split("min")[0].substring(1).trim());
+            console.log(details);
+            return details;
+        }
+        return null;
+    };
+     
+const calculateCaloriesBurnt = (workoutDetails) =>{
+        const durationInMinutes = parseInt(workoutDetails.duration);
+        const weightInKg = parseInt(workoutDetails.weight);
+        const caloriesBurntPerMinute= 5;
+        return durationInMinutes * caloriesBurntPerMinute * weightInKg;
+    };
+
+    
+ 
+
+ module.exports ={UserSignin,getDashboard,UserLogin,getWorkoutByDate,addWorkout};
 
 

@@ -9,10 +9,10 @@ const Authentication = () => {
   const[login,setLogin] = useState(false);
   return (
    <div className="h-screen w-screen overflow-hidden text-white">
-    <div className="flex h-full">
+    <div className="flex h-full ">
     <div className="flex-[1] xl:flex hidden">
-        <img src={logo} alt="" className="top-[20px] left-[30px] object-contain  cursor-pointer z-10 absolute " />
-        <img src={cover} alt="" className="relative object-contain top-[80px] " /> 
+        <img src={logo} alt="" className="object-contain  cursor-pointer z-10 absolute w-[100px] h-[100px] " />
+        <img src={cover} alt="" className="relative object-cover top-[80px] " /> 
     </div>
     <div className="flex-[1] flex flex-col p-[40px] gap-[16px] xl:items-baseline items-center justify-center ">   
         {login?

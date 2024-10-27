@@ -3,8 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const env = require("dotenv");
-const { UserSignin, getDashboard, UserLogin } = require("./Controllers/Users.js");
-const { WorkoutsInfo } = require("./Controllers/Workouts.js");
+const { UserSignin, getDashboard, UserLogin, getWorkoutByDate, addWorkout } = require("./Controllers/Users.js");
 const {verifyToken} = require("./Middleware/verifyToken.js")
 const port =4000;
 
@@ -23,9 +22,11 @@ app.get("/",(req,res)=>{
 })
 
 app.post("/signup",UserSignin);
-app.post("/addworkout", WorkoutsInfo);
 app.post("/signin",UserLogin);
 app.get("/dashboard",verifyToken,getDashboard);
+app.get("/workout",verifyToken,getWorkoutByDate);
+app.post("/workout",verifyToken,addWorkout);
+
 
 app.listen(port,(error)=>{
     if(!error){
