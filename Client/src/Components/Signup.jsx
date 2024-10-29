@@ -1,5 +1,39 @@
+import { useState } from "react"
+
 const Signup = () => {
 
+const [loading, setLoading] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const validateInputs = () => {
+    if (!name || !email || !password) {
+      alert("Please fill in all fields");
+      return false;
+    }
+    return true;
+  };
+
+  const handelSignUp = async () => {
+    setLoading(true);
+    setButtonDisabled(true);
+    if (validateInputs()) { 
+      await UserSignin({ name, email, password })
+        .then((res) => {
+          dispatch(loginSuccess(res.data));
+          alert("Account Created Success");
+          setLoading(false);
+          setButtonDisabled(false);
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+          setLoading(false);
+          setButtonDisabled(false);
+        });
+    }
+  };
     return (
       <div className=" flex flex-col mb-4 gap-10" >
         <div>
@@ -10,19 +44,33 @@ const Signup = () => {
              <label >
                 <span>Email</span>
               </label>
-              <input placeholder="Email" type="text" 
+              <input placeholder="Email" 
+              type="email" 
+              name="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
               className=" bg-slate-500 xl:h-[60px] h-[40px]  xl:w-[30vw] w-[310px] text-[14px] xl:text-[16px] rounded-[10px] outline-none border-none"/>
               <label >
                   <span>Username</span>
               </label>
-              <input placeholder="Username" type="text" 
+              <input placeholder="Username"
+              name="name" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)}
+              type="text" 
               className=" bg-slate-500 xl:h-[60px] h-[40px]  xl:w-[30vw] w-[310px] text-[14px] xl:text-[16px] rounded-[10px] outline-none border-none"/>
               <label>
                   <span>Password</span>
               </label>
-              <input placeholder="Password" type="password"  
+              <input placeholder="Password"
+              name="password" 
+              value={password} 
+            onChange={(e) => setPassword(e.target.value)}
+              type="password"  
               className=" bg-slate-500 xl:h-[60px] h-[40px] xl:w-[30vw] w-[310px] text-[14px] xl:text-[16px] rounded-[10px] outline-none"/>
-              <button className="p-3 mt-2 xl:w-[10vw] w-[100px] rounded-[10px] bg-pink-500" >Log in</button>
+              <button 
+              onClick={handelSignUp}
+              className="p-3 mt-2 xl:w-[10vw] w-[100px] rounded-[10px] bg-pink-500" >Sign up</button>
           </form>
       </div>
     )

@@ -17,7 +17,7 @@ const mongoose = require("mongoose");
     date:{
         type:Date,
         default:Date.now,
-    }
+    },
 });
 
 module.exports= {Users};

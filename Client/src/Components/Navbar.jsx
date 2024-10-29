@@ -1,12 +1,9 @@
 import {Link} from 'react-router-dom'
 import logo from "../Assets/logo.png"
-import { useDispatch } from 'react-redux'
-import {logout} from "../redux/userSlice" 
+ 
+const Navbar = () => { 
 
 
-const Navbar = ({currentUser}) => { 
-
-  const dispatch = useDispatch()
   return (
     <div className="h-[80px] bg-slate-600 flex items-center justify-between
      text-[16px] sticky top-0 z-10 text-white border-b-2 border-slate-400"> 
@@ -36,7 +33,7 @@ const Navbar = ({currentUser}) => {
             </Link>
         </div>
         <div className='px-10'>
-        <button onClick={()=>dispatch(logout())}> Logout</button>
+        <button > Logout</button>
         </div> 
     </div>
   )
