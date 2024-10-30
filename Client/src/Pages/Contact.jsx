@@ -2,7 +2,7 @@ import cover from '../Assets/gymLarge.jpeg'
 
 const Contact = () => {
   return (
-    <div className="flex h-full items-center gap-4 flex-wrap text-white text-[20px]">
+    <div className="flex h-fit items-center gap-4 bg-slate-800 flex-wrap text-white text-[20px]">
 
       <div 
       className="flex flex-wrap sm:items-center px-6 xl:items-end justify-center flex-col gap-2 flex-[1]">

@@ -46,7 +46,7 @@ const UserSignin = async(req,res)=>{
 
     const token = jwt.sign({id:user._id},"secret_token");
 
-   return res.status(400).json({token,user:{id:user._id,email:user.email}});
+   return res.json({token,user:{id:user._id,email:user.email}});
 
  };
 

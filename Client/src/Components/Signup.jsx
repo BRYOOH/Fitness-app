@@ -1,8 +1,13 @@
 import { useState } from "react"
+import {UserSignUp} from '../api/index'
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../redux/userSlice";
+
 
 const Signup = () => {
 
-const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,11 +21,13 @@ const [loading, setLoading] = useState(false);
     return true;
   };
 
-  const handelSignUp = async () => {
+  const handelSignUp = async (e) => {
+    e.preventDefault();
+
     setLoading(true);
     setButtonDisabled(true);
     if (validateInputs()) { 
-      await UserSignin({ name, email, password })
+      await UserSignUp({ name, email, password }) 
         .then((res) => {
           dispatch(loginSuccess(res.data));
           alert("Account Created Success");
@@ -40,7 +47,9 @@ const [loading, setLoading] = useState(false);
           <h1 className="uppercase text-[50px]">Welcome to gym-fit</h1>
           <span className="text-[30px]">Enter to you details below</span>
         </div>
-          <form className=" flex flex-col">
+          <form 
+          onSubmit={handelSignUp()}
+          className=" flex flex-col">
              <label >
                 <span>Email</span>
               </label>
@@ -69,7 +78,7 @@ const [loading, setLoading] = useState(false);
               type="password"  
               className=" bg-slate-500 xl:h-[60px] h-[40px] xl:w-[30vw] w-[310px] text-[14px] xl:text-[16px] rounded-[10px] outline-none"/>
               <button 
-              onClick={handelSignUp}
+              type="submit"
               className="p-3 mt-2 xl:w-[10vw] w-[100px] rounded-[10px] bg-pink-500" >Sign up</button>
           </form>
       </div>

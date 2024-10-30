@@ -54,7 +54,7 @@ const Dashboard = () => {
     };
 
   return (
-    <div className="h-fit flex flex-wrap text-white py-[22px]">
+    <div className="h-fit flex flex-wrap  bg-slate-800 text-white py-[22px]">
       <h1 className="text-[30px] font-bold p-3">Dashboard</h1>
     <div className="flex flex-wrap items-center justify-between px-5 mt-5 w-full">
     {counts.map((item,index)=>(

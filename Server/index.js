@@ -12,7 +12,6 @@ env.config();
 app.use(express.json());
 app.use(cors());
 
-
 mongoose.connect("mongodb+srv://brianmuchira001:Muriukis@cluster0.c8atalq.mongodb.net/GymFit").then
 ((resp)=>console.log("MongoDB is running")).catch((err)=>{console.log("MongoDB clashed");
 })
