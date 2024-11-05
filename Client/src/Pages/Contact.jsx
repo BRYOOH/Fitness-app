@@ -1,6 +1,29 @@
+import { useRef } from 'react'
+import emailjs from '@emailjs/browser';
 import cover from '../Assets/gymLarge.jpeg'
 
+
 const Contact = () => {
+
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm('service_96b50mg', 'template_o7k8wg3', form.current, {
+        publicKey: 'j5lxyQK3Pt3mDexe0',
+      })
+      .then(
+        () => {
+          alert('SUCCESS!');
+        },
+        (error) => {
+          alert('FAILED...', error.text);
+        },
+      );
+  };
+
   return (
     <div className="flex h-fit items-center gap-4 bg-slate-800 flex-wrap text-white text-[20px]">
 
@@ -11,27 +34,33 @@ const Contact = () => {
         <p className="text-[20px] font-extrabold flex  ">Please enter your feedback below</p>
        
       
-       <form className="flex flex-col flex-wrap gap-3 ">
+       <form 
+       ref={form}
+       onSubmit={sendEmail}
+       className="flex flex-col flex-wrap gap-3 ">
         <label className="flex flex-col font-bold" >
           Your name
         <input type="text"
+        name='user_name'
         className="px-3 py-6 xl:w-[550px] sm:w-[360px] bg-slate-400 font-normal border-none rounded-[15px] outline-none"/>
         </label>
        <label className="flex flex-col font-bold">
         Your Email
         <input type="text"  
+        name='user_email'
         className="px-3 py-6  xl:w-[550px] sm:w-[360px] bg-slate-400 font-normal text-black border-none rounded-[15px] outline-none"/>
        </label>
         <label className='flex flex-col font-bold'>
           Your Message
         <textarea
+         name='message'
          rows={5} 
          className="p-10 border-none outline-none bg-slate-400  rounded-[15px] " 
         />
         </label>
          <button 
          className="p-5 border-none rounded-[15px] min-w-[360px]  max-w-[550px] bg-tertiary outline-none mb-3" 
-         onSubmit={""}> 
+          > 
          Send</button>
        </form>
       </div>

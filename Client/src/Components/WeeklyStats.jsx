@@ -11,7 +11,7 @@ const WeeklyStats = ({data}) => {
             data: data?.totalWeeksCaloriesBurnt?.weeks
         }
          ]}
-         series={[{data:data?.totalWeeksCaloriesBurnt?.caloriesBurned}]}
+         series={[{data:data?.totalWeeksCaloriesBurnt?.caloriesBurnt}]}
          height={300}
 
         className="text-tertiary"
