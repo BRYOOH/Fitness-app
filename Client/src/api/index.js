@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:4000/",
+  baseURL: "https://fitness-app-2lke.onrender.com/",
 });
 
 export const UserSignUp = async (data) => API.post("/signup", data);
